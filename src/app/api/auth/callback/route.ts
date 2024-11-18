@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
       grant_type: "authorization_code",
       code,
       client_id: process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || "",
-      client_secret: process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_SECRET || "",
+      client_secret: process.env.GOOGLE_OAUTH_CLIENT_SECRET || "",
       redirect_uri: process.env.NEXT_PUBLIC_GOOGLE_OAUTH_REDIRECT_URI || ""
     })
   )
