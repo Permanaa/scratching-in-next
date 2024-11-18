@@ -2,10 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import Card from "@/components/kanban-card";
-import Modal from "@/components/modal";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import { useLocalStorageState } from "@/hooks/useLocalStorage";
-import { XMark } from "@/icons/x-mark";
 import { DragEvent, FormEvent, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -191,56 +189,6 @@ export default function Home() {
           </div>
         </DialogContent>
       </Dialog>
-
-      {/* <Modal isOpen={isOpen}>
-        <div className="bg-main-50 rounded-xl p-4 relative min-w-96">
-          <div className="flex justify-between mb-4">
-            <h5 className="text-xl">Create Card</h5>
-            <button onClick={onClose}>
-              <XMark />
-            </button>
-          </div>
-          <div>
-            <form className="flex flex-col gap-4" onSubmit={onSubmit}>
-              <div>
-                <label htmlFor="title">
-                  Title<span className="text-red-600">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="title"
-                  name="title"
-                  className="border border-main-200 rounded-lg focus:ring-main-500 focus:border-main-500 block w-full p-2.5"
-                  required
-                />
-              </div>
-              <div className="flex flex-col">
-                <label htmlFor="description">Description</label>
-                <textarea
-                  id="description"
-                  name="description"
-                  className="border border-main-200 rounded-lg focus:ring-main-500 focus:border-main-500 block w-full p-2.5"
-                ></textarea>
-              </div>
-              <div>
-                <label htmlFor="tags">
-                  Tags <span className="text-sm">(separate with commas)</span>
-                </label>
-                <input
-                  type="text"
-                  id="tags"
-                  name="tags"
-                  className="border border-main-200 rounded-lg focus:ring-main-500 focus:border-main-500 block w-full p-2.5"
-                  placeholder="e.g. priority,medium"
-                />
-              </div>
-              <Button type="submit" className="self-end">
-                Create
-              </Button>
-            </form>
-          </div>
-        </div>
-      </Modal> */}
     </main>
   );
 }
