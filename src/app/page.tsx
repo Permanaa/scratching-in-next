@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
@@ -9,6 +8,9 @@ export default function Home() {
       </Link>
       <Link href='/preview'>
         Preview
+      </Link>
+      <Link href='/google-auth'>
+        Google OAuth 2.0
       </Link>
     </main>
   );

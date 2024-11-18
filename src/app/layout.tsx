@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/providers/AuthProvider";
+import { cookies } from "next/headers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,9 +16,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const token = cookies().get("access")?.value || "";
+  const refreshToken = cookies().get("refresh")?.value || "";
+
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <AuthProvider value={{ token, refreshToken }}>{children}</AuthProvider>
+      </body>
     </html>
   );
 }
