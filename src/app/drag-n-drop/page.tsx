@@ -8,6 +8,12 @@ import { useLocalStorageState } from "@/hooks/useLocalStorage";
 import { XMark } from "@/icons/x-mark";
 import { DragEvent, FormEvent, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const section = [
   {
@@ -102,7 +108,7 @@ export default function Home() {
             onDragOver={onDragOver}
             onDrop={(e) => onDrop(e, section.id)}
           >
-            <p className="font-semibold border-b border-main-500 pb-4">
+            <p className="font-semibold border-b border-primary pb-4">
               {section.title}
             </p>
             <div className="py-4 flex flex-col gap-4 h-full">
@@ -139,7 +145,54 @@ export default function Home() {
         </div>
       )}
 
-      <Modal isOpen={isOpen}>
+      <Dialog modal open={isOpen} onOpenChange={onClose}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Create Card</DialogTitle>
+          </DialogHeader>
+          <div>
+            <form className="flex flex-col gap-4" onSubmit={onSubmit}>
+              <div>
+                <label htmlFor="title">
+                  Title<span className="text-red-600">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="title"
+                  name="title"
+                  className="border border-main-200 rounded-lg focus:ring-main-500 focus:border-main-500 block w-full p-2.5"
+                  required
+                />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="description">Description</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  className="border border-main-200 rounded-lg focus:ring-main-500 focus:border-main-500 block w-full p-2.5"
+                ></textarea>
+              </div>
+              <div>
+                <label htmlFor="tags">
+                  Tags <span className="text-sm">(separate with commas)</span>
+                </label>
+                <input
+                  type="text"
+                  id="tags"
+                  name="tags"
+                  className="border border-main-200 rounded-lg focus:ring-main-500 focus:border-main-500 block w-full p-2.5"
+                  placeholder="e.g. priority,medium"
+                />
+              </div>
+              <Button type="submit" className="self-end">
+                Create
+              </Button>
+            </form>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* <Modal isOpen={isOpen}>
         <div className="bg-main-50 rounded-xl p-4 relative min-w-96">
           <div className="flex justify-between mb-4">
             <h5 className="text-xl">Create Card</h5>
@@ -187,7 +240,7 @@ export default function Home() {
             </form>
           </div>
         </div>
-      </Modal>
+      </Modal> */}
     </main>
   );
 }

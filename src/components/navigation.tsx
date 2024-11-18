@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Link from "next/link";
 import StackIcon from "@/icons/stack";
@@ -16,7 +16,7 @@ const menu = [
   {
     title: "Sortable List",
     slug: "/drag-n-drop/sortable-list",
-    icon: Stack3DIcon
+    icon: Stack3DIcon,
   },
   {
     title: "File",
@@ -27,24 +27,31 @@ const menu = [
     title: "Multi-Select",
     slug: "/drag-n-drop/multi-select",
     icon: ArrowDownOnSquare,
-  }
-]
+  },
+];
 
 export default function Navigation() {
-  const pathname = usePathname()
+  const pathname = usePathname();
   return (
     <ul className="flex flex-col gap-2">
-      {menu.map(item => {
-        const isActive = item.slug === pathname
+      {menu.map((item) => {
+        const isActive = item.slug === pathname;
         return (
           <li key={item.slug}>
-            <Link href={item.slug} className={`flex gap-2 px-4 py-3 rounded-lg font-semibold ${isActive ? "bg-main-500 text-main-50 hover:bg-main-400" : "text-main-950 hover:bg-main-100"}`}>
+            <Link
+              href={item.slug}
+              className={`flex gap-2 px-4 py-3 rounded-lg font-semibold ${
+                isActive
+                  ? "bg-primary text-white hover:bg-primary/90"
+                  : "hover:bg-primary/20"
+              }`}
+            >
               <item.icon className="w-6" />
               <p>{item.title}</p>
             </Link>
           </li>
-        )
+        );
       })}
     </ul>
-  )
+  );
 }

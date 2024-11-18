@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 // import Button from "@/components/button";
 import { useState, DragEvent } from "react";
@@ -16,7 +16,7 @@ const dataSample = [
     id: "3",
     title: "Attack on Titan",
   },
-]
+];
 
 interface IDragInfo {
   index: number | null;
@@ -24,39 +24,39 @@ interface IDragInfo {
 }
 
 export default function SortableList() {
-  const [data, setData] = useState(dataSample)
-  const [dragInfo, setDragInfo] = useState<IDragInfo>({ index: null, id: '' })
-  const [hoverId, setHoverId] = useState<string>('')
+  const [data, setData] = useState(dataSample);
+  const [dragInfo, setDragInfo] = useState<IDragInfo>({ index: null, id: "" });
+  const [hoverId, setHoverId] = useState<string>("");
 
   const onDragOver = (e: DragEvent<HTMLDivElement>, hoverIdParam: string) => {
-    e.preventDefault()
+    e.preventDefault();
     if (hoverId !== hoverIdParam) {
-      setHoverId(hoverIdParam)
+      setHoverId(hoverIdParam);
     }
-  }
+  };
 
   const onDragEnd = () => {
-    setHoverId('')
-    setDragInfo({ index: null, id: '' })
-  }
+    setHoverId("");
+    setDragInfo({ index: null, id: "" });
+  };
 
   const onDragStart = (cardId: string) => {
-    const cardIndex = data.findIndex(card => card.id === cardId)
+    const cardIndex = data.findIndex((card) => card.id === cardId);
     setDragInfo({
       index: cardIndex,
       id: cardId,
-    })
-  }
+    });
+  };
 
   const onDrop = (e: DragEvent<HTMLDivElement>, targetId: string) => {
-    e.preventDefault()
-    const cardIndex = data.findIndex(card => card.id === dragInfo.id)
-    const targetIndex = data.findIndex(card => card.id === targetId)
-    const newData = [...data]
-    newData.splice(cardIndex, 1)
-    newData.splice(targetIndex, 0, {...data[cardIndex]})
-    setData(newData)
-  }
+    e.preventDefault();
+    const cardIndex = data.findIndex((card) => card.id === dragInfo.id);
+    const targetIndex = data.findIndex((card) => card.id === targetId);
+    const newData = [...data];
+    newData.splice(cardIndex, 1);
+    newData.splice(targetIndex, 0, { ...data[cardIndex] });
+    setData(newData);
+  };
 
   return (
     <main className="py-4 pr-4">
@@ -72,7 +72,7 @@ export default function SortableList() {
             <li key={item.id}>
               {/* <hr className={`mb-1 ${item.id === hoverId && typeof dragInfo.index === 'number' && dragInfo.index > index ? 'border-main-400' : 'border-white'}`} /> */}
               <div className="flex items-center">
-                <div className="w-[50px] p-4 flex justify-center bg-main-500 text-white font-bold rounded-l-lg">
+                <div className="w-[50px] p-4 flex justify-center bg-primary text-white font-bold rounded-l-lg">
                   {index + 1}
                 </div>
                 <div
@@ -92,5 +92,5 @@ export default function SortableList() {
         </ul>
       </div>
     </main>
-  )
+  );
 }
