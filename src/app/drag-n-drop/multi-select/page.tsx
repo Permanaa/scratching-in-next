@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import Button from "@/components/button";
-import Trash from "@/icons/trash"
-import { DragEvent, FormEvent, useState } from "react"
+import { Button } from "@/components/ui/button";
+import Trash from "@/icons/trash";
+import { DragEvent, FormEvent, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 interface IData {
@@ -31,43 +31,45 @@ const initialData: IData[] = [
     id: "5",
     title: "5th",
   },
-]
+];
 
 export default function MultipleDrag() {
-  const [data, setData] = useState<IData[]>(initialData)
-  const [selected, setSelected] = useState<string[]>([])
+  const [data, setData] = useState<IData[]>(initialData);
+  const [selected, setSelected] = useState<string[]>([]);
 
   const onChangeSelect = (id: string) => {
     if (selected.includes(id)) {
-      const newSelected = selected.filter(item => item !== id)
-      setSelected(newSelected)
+      const newSelected = selected.filter((item) => item !== id);
+      setSelected(newSelected);
     } else {
-      setSelected(prev => ([...prev, id]))
+      setSelected((prev) => [...prev, id]);
     }
-  }
+  };
 
   const onDragOver = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-  }
+    e.preventDefault();
+  };
 
   const onDrop = () => {
-    const newData = data.filter(item => !selected.includes(item.id))
-    setData(newData)
-    setSelected([])
-  }
+    const newData = data.filter((item) => !selected.includes(item.id));
+    setData(newData);
+    setSelected([]);
+  };
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { title } = e.currentTarget as typeof e.currentTarget & { title: { value: string } }
+    const { title } = e.currentTarget as typeof e.currentTarget & {
+      title: { value: string };
+    };
     if (title?.value) {
       const newData = {
         id: uuidv4(),
-        title: title?.value
-      }
-      setData(prev => ([...prev, newData]))
+        title: title?.value,
+      };
+      setData((prev) => [...prev, newData]);
     }
-    e.currentTarget.reset()
-  }
+    e.currentTarget.reset();
+  };
 
   return (
     <main className="py-4 pr-4">
@@ -87,7 +89,7 @@ export default function MultipleDrag() {
 
       <div className="mx-6 grid grid-cols-2 gap-6">
         <div className="flex flex-col gap-2">
-          {data.map(item => (
+          {data.map((item) => (
             <div
               key={item.id}
               draggable={selected.includes(item.id)}
@@ -110,5 +112,5 @@ export default function MultipleDrag() {
         </div>
       </div>
     </main>
-  )
+  );
 }

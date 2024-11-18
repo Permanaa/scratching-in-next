@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import Button from "@/components/button";
+import { Button } from "@/components/ui/button";
 import Card from "@/components/kanban-card";
 import Modal from "@/components/modal";
 import { useDisclosure } from "@/hooks/useDisclosure";
@@ -22,7 +22,7 @@ const section = [
     id: "done",
     title: "Done",
   },
-]
+];
 
 interface IFormCreate {
   title: { value: string };
@@ -39,53 +39,54 @@ interface ICardData {
 }
 
 export default function Home() {
-  const [data, setData] = useLocalStorageState<ICardData[]>("kanban-data", [])
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [data, setData] = useLocalStorageState<ICardData[]>("kanban-data", []);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const onDragOver = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-  }
+    e.preventDefault();
+  };
 
   const onDragStart = (e: DragEvent<HTMLDivElement>, cardId: string) => {
-    e.dataTransfer.setData("card", cardId)
-  }
+    e.dataTransfer.setData("card", cardId);
+  };
 
   const onDrop = (e: DragEvent<HTMLDivElement>, section: string) => {
-    e.preventDefault()
-    const cardId = e.dataTransfer.getData("card")
-    const cardIndex = data.findIndex(card => card.id === cardId)
-    const updateCard = {...data[cardIndex], section}
-    const newData = [...data]
-    newData[cardIndex] = updateCard
-    setData(newData)
-  }
+    e.preventDefault();
+    const cardId = e.dataTransfer.getData("card");
+    const cardIndex = data.findIndex((card) => card.id === cardId);
+    const updateCard = { ...data[cardIndex], section };
+    const newData = [...data];
+    newData[cardIndex] = updateCard;
+    setData(newData);
+  };
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { title, description, tags } = e.currentTarget as typeof e.currentTarget & IFormCreate
-    const splitTags = !!tags?.value ? tags?.value?.split(",") : []
+    const { title, description, tags } =
+      e.currentTarget as typeof e.currentTarget & IFormCreate;
+    const splitTags = !!tags?.value ? tags?.value?.split(",") : [];
     const newCard = {
       id: uuidv4(),
       title: title?.value || "",
       description: description?.value || "",
       tags: splitTags,
       section: "todo",
-    }
-    setData(prev => ([...prev, newCard]))
-    onClose()
-    e.currentTarget.reset()
-  }
+    };
+    setData((prev) => [...prev, newCard]);
+    onClose();
+    e.currentTarget.reset();
+  };
 
   const onDelete = (id: string) => {
-    const newData = data.filter(item => item.id !== id)
-    setData(newData)
-  }
+    const newData = data.filter((item) => item.id !== id);
+    setData(newData);
+  };
 
   useEffect(() => {
-    setIsLoading(false)
-  }, [])
+    setIsLoading(false);
+  }, []);
 
   return (
     <main className="py-4 min-w-0">
@@ -95,31 +96,34 @@ export default function Home() {
       </div>
 
       <div className="mx-6 grid grid-cols-[repeat(3,minmax(256px,1fr))] gap-4 py-4">
-        {section.map((section => (
+        {section.map((section) => (
           <div
             key={section.id}
             onDragOver={onDragOver}
             onDrop={(e) => onDrop(e, section.id)}
           >
-            <p className="font-semibold border-b border-main-500 pb-4">{section.title}</p>
+            <p className="font-semibold border-b border-main-500 pb-4">
+              {section.title}
+            </p>
             <div className="py-4 flex flex-col gap-4 h-full">
-              {!isLoading && data?.map(item => {
-                if (item.section === section.id) {
-                  return (
-                    <Card
-                      key={item.id}
-                      title={item.title}
-                      tags={item.tags}
-                      description={item.description}
-                      onDragStart={(e) => onDragStart(e, item.id)}
-                      onDelete={() => onDelete(item.id)}
-                    />
-                  )
-                }
-              })}
+              {!isLoading &&
+                data?.map((item) => {
+                  if (item.section === section.id) {
+                    return (
+                      <Card
+                        key={item.id}
+                        title={item.title}
+                        tags={item.tags}
+                        description={item.description}
+                        onDragStart={(e) => onDragStart(e, item.id)}
+                        onDelete={() => onDelete(item.id)}
+                      />
+                    );
+                  }
+                })}
             </div>
           </div>
-        )))}
+        ))}
       </div>
 
       {!isLoading && !data?.length && (
@@ -146,7 +150,9 @@ export default function Home() {
           <div>
             <form className="flex flex-col gap-4" onSubmit={onSubmit}>
               <div>
-                <label htmlFor="title">Title<span className="text-red-600">*</span></label>
+                <label htmlFor="title">
+                  Title<span className="text-red-600">*</span>
+                </label>
                 <input
                   type="text"
                   id="title"
@@ -164,7 +170,9 @@ export default function Home() {
                 ></textarea>
               </div>
               <div>
-                <label htmlFor="tags">Tags <span className="text-sm">(separate with commas)</span></label>
+                <label htmlFor="tags">
+                  Tags <span className="text-sm">(separate with commas)</span>
+                </label>
                 <input
                   type="text"
                   id="tags"
@@ -173,7 +181,9 @@ export default function Home() {
                   placeholder="e.g. priority,medium"
                 />
               </div>
-              <Button type="submit" className="self-end">Create</Button>
+              <Button type="submit" className="self-end">
+                Create
+              </Button>
             </form>
           </div>
         </div>
