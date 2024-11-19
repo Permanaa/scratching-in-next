@@ -27,17 +27,19 @@ export async function GET(request: NextRequest) {
   const cookiesStore = cookies()
 
   cookiesStore.set('access', data.access_token, {
+    path: "/",
     httpOnly: true,
-    secure: true,
-    sameSite: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
     maxAge: data.expires_in,
   })
 
   if (data.refresh_token) {
     cookiesStore.set('refresh', data.refresh_token, {
+      path: "/",
       httpOnly: true,
-      secure: true,
-      sameSite: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
     })
   }
 
