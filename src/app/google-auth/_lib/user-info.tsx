@@ -15,7 +15,7 @@ const UserInfo: FC = () => {
         <CircleUserRound className="h-[60px] w-[60px]" strokeWidth={1} />
         <div className="text-center">
           <p className="font-medium">Who Am I?</p>
-          <p className="text-gray-500">Log in with google oauth 2</p>
+          <p className="text-gray-500">Log in with google oauth 2.0</p>
         </div>
       </div>
     );

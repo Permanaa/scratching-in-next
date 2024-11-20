@@ -1,5 +1,6 @@
 "use client";
 
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import axios, { AxiosResponse } from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -39,6 +40,8 @@ export function AuthProvider({ children, value }: AuthProviderProps) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoadingProfile, setIsLoadingProfile] = useState<boolean>(!!token);
 
+  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || "";
+
   useEffect(() => {
     const fetchUser = async () => {
       setIsLoadingProfile(true);
@@ -74,7 +77,9 @@ export function AuthProvider({ children, value }: AuthProviderProps) {
         isLoadingProfile,
       }}
     >
-      {children}
+      <GoogleOAuthProvider clientId={googleClientId}>
+        {children}
+      </GoogleOAuthProvider>
     </AuthContext.Provider>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useGoogleLogin } from "@react-oauth/google";
 import axios, { AxiosResponse } from "axios";
 
 export default function LoginGoogle() {
@@ -18,6 +19,15 @@ export default function LoginGoogle() {
     window.location.assign(url.toString());
   };
 
+  const onSuccessGetCode = async (code: string) => {
+    // should it be post method instead?
+    await axios
+      .get(`/api/auth/google/callback?code=${code}&ux_mode=popup`)
+      .then((res: AxiosResponse<{ redirectUrl: string }>) => {
+        window.location.assign(res.data.redirectUrl);
+      });
+  };
+
   const handleLoginPopup = () => {
     if (window.google) {
       const client = window.google.accounts.oauth2.initCodeClient({
@@ -25,15 +35,7 @@ export default function LoginGoogle() {
         redirect_uri: "postmessage",
         ux_mode: "popup",
         scope: "openid email profile",
-        callback: async (response) => {
-          await axios
-            .get(
-              `/api/auth/google/callback?code=${response.code}&ux_mode=popup`
-            )
-            .then((res: AxiosResponse<{ redirectUrl: string }>) => {
-              window.location.assign(res.data.redirectUrl);
-            });
-        },
+        callback: (response) => onSuccessGetCode(response.code),
         error_callback: (error) => {
           console.log("haloooo error", error);
         },
@@ -43,10 +45,22 @@ export default function LoginGoogle() {
     }
   };
 
+  const handleLoginReactOauthGoogle = useGoogleLogin({
+    flow: "auth-code",
+    ux_mode: "popup",
+    onSuccess: (response) => onSuccessGetCode(response.code),
+    onError: (errorResponse) => {
+      console.log("haloooo error", errorResponse);
+    },
+  });
+
   return (
     <main className="flex items-center justify-center p-6 h-svh flex-col gap-4">
       <Button onClick={handleLogin}>login with redirect</Button>
       <Button onClick={handleLoginPopup}>login with popup</Button>
+      <Button onClick={handleLoginReactOauthGoogle}>
+        login using @react-oauth/google
+      </Button>
     </main>
   );
 }
