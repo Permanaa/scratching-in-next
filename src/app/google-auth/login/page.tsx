@@ -3,10 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios, { AxiosResponse } from "axios";
+import { useState } from "react";
 
 export default function LoginGoogle() {
   const clientId = process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || "";
   const redirectUri = process.env.NEXT_PUBLIC_GOOGLE_OAUTH_REDIRECT_URI || "";
+
+  const [isLoadingCallback, setIsLoadingCallback] = useState<boolean>(false);
 
   const handleLogin = () => {
     const url = new URL("https://accounts.google.com/o/oauth2/v2/auth");
@@ -20,11 +23,15 @@ export default function LoginGoogle() {
   };
 
   const onSuccessGetCode = async (code: string) => {
+    setIsLoadingCallback(true);
     // should it be post method instead?
     await axios
       .get(`/api/auth/google/callback?code=${code}&ux_mode=popup`)
       .then((res: AxiosResponse<{ redirectUrl: string }>) => {
         window.location.assign(res.data.redirectUrl);
+      })
+      .finally(() => {
+        setIsLoadingCallback(false);
       });
   };
 
@@ -56,9 +63,16 @@ export default function LoginGoogle() {
 
   return (
     <main className="flex items-center justify-center p-6 h-svh flex-col gap-4">
-      <Button onClick={handleLogin}>login with redirect</Button>
-      <Button onClick={handleLoginPopup}>login with popup</Button>
-      <Button onClick={handleLoginReactOauthGoogle}>
+      <Button onClick={handleLogin} disabled={isLoadingCallback}>
+        login with redirect
+      </Button>
+      <Button onClick={handleLoginPopup} disabled={isLoadingCallback}>
+        login with popup
+      </Button>
+      <Button
+        onClick={handleLoginReactOauthGoogle}
+        disabled={isLoadingCallback}
+      >
         login using @react-oauth/google
       </Button>
     </main>
