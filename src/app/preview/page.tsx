@@ -1,6 +1,7 @@
-"use client"
+"use client";
 
-import Preview from "@/components/preview";
+import Preview from "@/app/preview/_lib/preview";
+import { Button } from "@/components/ui/button";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { convertToBase64 } from "@/utils/convert-to-base-64";
 import { useFormik } from "formik";
@@ -21,61 +22,66 @@ export interface IForm {
 
 const initialSecondaryCTA = {
   text: "Learn More",
-  link: "https://github.com/Permanaa/use-case-live-preview",
-}
+  link: "https://github.com/Permanaa/scratching-in-next",
+};
 
 const defaultValues = {
   title: "Boost your productivity. Start using our app today.",
-  description: "Ac euismod vel sit maecenas id pellentesque eu sed consectetur. Malesuada adipiscing sagittis vel nulla.",
+  description:
+    "Ac euismod vel sit maecenas id pellentesque eu sed consectetur. Malesuada adipiscing sagittis vel nulla.",
   mainCTA: {
     text: "Get Started",
-    link: "https://github.com/Permanaa"
+    link: "https://github.com/Permanaa",
   },
   secondaryCTA: initialSecondaryCTA,
-  image: "https://tailwindui.com/img/component-images/dark-project-app-screenshot.png",
-}
+  image: "",
+};
 
 export default function Home() {
-  const { set, get } = useLocalStorage()
+  const { set, get } = useLocalStorage();
 
-  const { handleSubmit, values, handleChange, setFieldValue, setValues } = useFormik<IForm>({
-    initialValues: defaultValues,
-    onSubmit: values => {
-      set<IForm>("live-preview", values)
-    }
-  })
+  const { handleSubmit, values, handleChange, setFieldValue, setValues } =
+    useFormik<IForm>({
+      initialValues: defaultValues,
+      onSubmit: (values) => {
+        set<IForm>("live-preview", values);
+      },
+    });
 
   useEffect(() => {
-    const initialValues = get<IForm>("live-preview") || defaultValues
-    setValues(initialValues)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    const initialValues = get<IForm>("live-preview") || defaultValues;
+    setValues(initialValues);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onChangeSecondaryCTA = (e: ChangeEvent<HTMLInputElement>) => {
-    const { checked } = e.currentTarget
+    const { checked } = e.currentTarget;
     if (!checked) {
-      setFieldValue("secondaryCTA", null)
-      return
+      setFieldValue("secondaryCTA", null);
+      return;
     }
-    setFieldValue("secondaryCTA", initialSecondaryCTA)
-  }
+    setFieldValue("secondaryCTA", initialSecondaryCTA);
+  };
 
   const onChangeImage = async (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
+    const files = e.target.files;
     if (files && files?.length) {
-      const base64Image= await convertToBase64(files[0]) as string
-      setFieldValue("image", base64Image)
+      const base64Image = (await convertToBase64(files[0])) as string;
+      setFieldValue("image", base64Image);
     }
-  }
+  };
 
   const resetDefault = () => {
-    setValues(defaultValues)
-  }
+    setValues(defaultValues);
+  };
 
   return (
     <main className="grid grid-cols-1 lg:grid-cols-3 min-h-screen">
       <div className="p-4 flex items-center justify-center bg-gray-300 dark:bg-slate-800 overflow-y-auto">
-        <form className="w-full max-w-lg flex flex-col gap-5" onSubmit={handleSubmit}>
+        <form
+          className="w-full max-w-lg flex flex-col gap-5"
+          onSubmit={handleSubmit}
+        >
           <div>
             <label
               htmlFor="title"
@@ -92,7 +98,7 @@ export default function Home() {
               value={values.title}
             />
           </div>
-  
+
           <div>
             <label
               htmlFor="description"
@@ -158,7 +164,9 @@ export default function Home() {
                 className="w-4 h-4 text-main-600 bg-gray-100 border-gray-300 rounded focus:ring-main-500 dark:focus:ring-main-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 onChange={onChangeSecondaryCTA}
               />
-              <label className="font-medium" htmlFor="secondary-cta">Secondary CTA</label>
+              <label className="font-medium" htmlFor="secondary-cta">
+                Secondary CTA
+              </label>
             </div>
             <div className="border border-slate-500 dark:border-slate-400 rounded-lg p-4">
               <div className="flex gap-4 items-center mb-4">
@@ -198,7 +206,9 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="image" className="block font-medium leading-6">Image</label>
+            <label htmlFor="image" className="block font-medium leading-6">
+              Image
+            </label>
             <input
               className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none focus:border focus:ring-1 focus:ring-main-500 focus:border-main-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
               id="image"
@@ -210,19 +220,10 @@ export default function Home() {
           </div>
 
           <div className="flex gap-4 self-end">
-            <button
-              type="button"
-              className="text-main-400 hover:text-main-300 p-2 rounded-lg w-fit focus:outline-none focus:ring-4 focus:ring-main-300"
-              onClick={resetDefault}
-            >
+            <Button variant="secondary" onClick={resetDefault}>
               Reset to Default
-            </button>
-            <button
-              type="submit"
-              className="bg-gradient-to-br from-main-400 to-main-700 hover:from-main-300 hover:to-main-600 py-2 px-6 focus:outline-none focus:ring-4 focus:ring-main-300 rounded-lg w-fit"
-            >
-              Save
-            </button>
+            </Button>
+            <Button type="submit">Save</Button>
           </div>
         </form>
       </div>
