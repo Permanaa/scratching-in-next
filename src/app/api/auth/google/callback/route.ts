@@ -22,6 +22,8 @@ export async function GET(request: NextRequest) {
     })
   )
 
+  console.log('halooooo exchange', res)
+
   const data = {
     access_token: res.data.access_token,
     refresh_token: res.data.refresh_token,
