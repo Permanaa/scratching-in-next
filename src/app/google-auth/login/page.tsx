@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useGoogleLogin, useGoogleOneTapLogin } from "@react-oauth/google";
 import axios, { AxiosResponse } from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function LoginGoogle() {
   const clientId = process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || "";
@@ -61,28 +61,6 @@ export default function LoginGoogle() {
     },
   });
 
-  const handleLoginMyindibizGoogle = useGoogleLogin({
-    flow: "auth-code",
-    ux_mode: "popup",
-    onSuccess: async (response) => {
-      setIsLoadingCallback(true);
-      await axios
-        .post(
-          "https://api-dev.myindibiz.co.id/customer/v2/user/login-with-google",
-          { code: response.code }
-        )
-        .then((res) => {
-          console.log("halooo indibiz", res);
-        })
-        .finally(() => {
-          setIsLoadingCallback(false);
-        });
-    },
-    onError: (errorResponse) => {
-      console.log("haloooo error", errorResponse);
-    },
-  });
-
   useGoogleOneTapLogin({
     use_fedcm_for_prompt: true,
     onSuccess: (res) => {
@@ -90,12 +68,6 @@ export default function LoginGoogle() {
     },
     onError: () => {
       console.log("haloooo Login Failed");
-    },
-  });
-
-  const handleLoginFlowImplicit = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
-      console.log("haloooo google token", tokenResponse);
     },
   });
 
@@ -112,14 +84,6 @@ export default function LoginGoogle() {
         disabled={isLoadingCallback}
       >
         login using @react-oauth/google
-      </Button>
-
-      <Button onClick={handleLoginMyindibizGoogle} disabled={isLoadingCallback}>
-        Login MyIndibiz Google
-      </Button>
-
-      <Button onClick={() => handleLoginFlowImplicit()}>
-        Login Google Flow Implicit
       </Button>
     </main>
   );
